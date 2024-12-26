@@ -5,8 +5,11 @@ import streamlit as st
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
-# Download the NLTK punkt resource if not already downloaded
-nltk.download('punkt', quiet=True)
+# Attempt to download 'punkt' tokenizer if not already downloaded
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt', quiet=True)
 
 # Set the directory to save model and vectorizer
 save_dir = os.path.expanduser("~/sms_spam_detection")
@@ -71,3 +74,4 @@ if st.button("Predict"):
             # Make the prediction
             result = model.predict(vector_input)[0]
             st.header("Spam Message" if result == 1 else "Not a Spam Message")
+
