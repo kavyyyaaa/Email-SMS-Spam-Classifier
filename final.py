@@ -5,19 +5,8 @@ import streamlit as st
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
-# Set the path to the folder where nltk_data is located
-nltk_data_path = os.path.expanduser('~/nltk_data')  # Modify this path based on where your nltk_data is
-
-# Add the nltk_data path to nltk's search path
-nltk.data.path.append(nltk_data_path)
-
-# Check if the 'punkt' tokenizer is available in nltk_data, if not download it
-try:
-    nltk.data.find('tokenizers/punkt')  # Check if punkt is available
-    print("Punkt tokenizer is found.")
-except LookupError:
-    print("Punkt tokenizer is not found. Downloading...")
-    nltk.download('punkt', download_dir=nltk_data_path)  # Downloads the punkt tokenizer to your specified directory
+# Download 'punkt' if not already downloaded
+nltk.download('punkt')
 
 save_dir = os.path.expanduser("~/sms_spam_detection")
 os.makedirs(save_dir, exist_ok=True)
@@ -25,6 +14,7 @@ os.makedirs(save_dir, exist_ok=True)
 model_path = os.path.join(save_dir, "model.pkl")
 vectorizer_path = os.path.join(save_dir, "vectorizer.pkl")
 
+# Train and save model if not already saved
 if not os.path.exists(model_path) or not os.path.exists(vectorizer_path):
     training_data = ["Free money now!", "Hey, how are you?", "Limited offer, click now!", "Let's catch up soon."]
     labels = [1, 0, 1, 0]  # 1 = Spam, 0 = Not Spam
